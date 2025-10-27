@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow">
+        <h1 class="text-2xl font-bold mb-4">EduForge ERP - Simple Test</h1>
+        
+        <div class="space-y-4">
+            <button onclick="testAdmin()" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 px-4 rounded-md font-medium">
+                Test Admin Portal
+            </button>
+            <button onclick="testStaff()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-md font-medium">
+                Test Staff Portal
+            </button>
+            <button onclick="testStudent()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-md font-medium">
+                Test Student Portal
+            </button>
+        </div>
+        
+        <div id="result" class="mt-4 p-4 bg-gray-100 rounded text-sm"></div>
+    </div>
+
+    <script>
+        function testAdmin() {
+            document.getElementById('result').innerHTML = 'Admin button clicked! JavaScript is working.';
+        }
+        
+        function testStaff() {
+            document.getElementById('result').innerHTML = 'Staff button clicked! JavaScript is working.';
+        }
+        
+        function testStudent() {
+            document.getElementById('result').innerHTML = 'Student button clicked! JavaScript is working.';
+        }
+        
+        // Test if basic functionality works
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('result').innerHTML = 'Page loaded successfully! JavaScript is working.';
+        });
+    </script>
+</body>
+</html>

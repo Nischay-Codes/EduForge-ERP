@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Test - EduForge ERP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen p-8">
+    <div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow">
+        <h1 class="text-2xl font-bold mb-6">Login Test</h1>
+        
+        <div class="space-y-4">
+            <button onclick="testLogin('admin')" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 px-4 rounded-md font-medium">
+                Test Admin Login
+            </button>
+            <button onclick="testLogin('staff')" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-md font-medium">
+                Test Staff Login
+            </button>
+            <button onclick="testLogin('student')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-md font-medium">
+                Test Student Login
+            </button>
+        </div>
+        
+        <div id="result" class="mt-6 p-4 bg-gray-100 rounded text-sm"></div>
+    </div>
+
+    <script>
+        // Load the same scripts as main site
+        const scripts = [
+            'js/config.js',
+            'js/auth.js',
+            'js/dashboard.js',
+            'js/forms.js',
+            'js/utils.js'
+        ];
+        
+        let scriptsLoaded = 0;
+        
+        scripts.forEach(src => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => {
+                scriptsLoaded++;
+                if (scriptsLoaded === scripts.length) {
+                    document.getElementById('result').innerHTML = 'All scripts loaded successfully!';
+                    // Initialize demo data
+                    if (typeof initializeDemoData === 'function') {
+                        initializeDemoData();
+                    }
+                }
+            };
+            script.onerror = () => {
+                document.getElementById('result').innerHTML += `<br>Error loading: ${src}`;
+            };
+            document.head.appendChild(script);
+        });
+        
+        function testLogin(role) {
+            const credentials = {
+                admin: { email: 'admin@eduforge.com', password: 'admin123' },
+                staff: { email: 'staff@eduforge.com', password: 'staff123' },
+                student: { email: 'student@eduforge.com', password: 'student123' }
+            };
+            
+            const cred = credentials[role];
+            
+            // Set selected role
+            selectedRole = role;
+            
+            // Test authentication
+            auth.signInWithEmailAndPassword(cred.email, cred.password)
+                .then(result => {
+                    document.getElementById('result').innerHTML = `
+                        <strong>✅ ${role.toUpperCase()} LOGIN SUCCESS!</strong><br>
+                        User: ${result.user.email}<br>
+                        Role: ${result.user.role}<br>
+                        UID: ${result.user.uid}
+                    `;
+                })
+                .catch(error => {
+                    document.getElementById('result').innerHTML = `
+                        <strong>❌ ${role.toUpperCase()} LOGIN FAILED!</strong><br>
+                        Error: ${error.message}
+                    `;
+                });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduForge ERP - Test Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">EduForge ERP - Quick Test</h1>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Test Login Credentials</h2>
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="border rounded p-4">
+                    <h3 class="font-medium text-blue-600">Student Account</h3>
+                    <p class="text-sm">Email: student@eduforge.com</p>
+                    <p class="text-sm">Password: student123</p>
+                </div>
+                <div class="border rounded p-4">
+                    <h3 class="font-medium text-green-600">Staff Account</h3>
+                    <p class="text-sm">Email: staff@eduforge.com</p>
+                    <p class="text-sm">Password: staff123</p>
+                </div>
+                <div class="border rounded p-4">
+                    <h3 class="font-medium text-purple-600">Admin Account</h3>
+                    <p class="text-sm">Email: admin@eduforge.com</p>
+                    <p class="text-sm">Password: admin123</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">Quick Actions</h2>
+            <div class="space-y-2">
+                <button onclick="clearStorage()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded mr-2">
+                    Clear All Data
+                </button>
+                <button onclick="initDemo()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-2">
+                    Reinitialize Demo Data
+                </button>
+                <button onclick="checkStorage()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mr-2">
+                    Check Storage
+                </button>
+                <button onclick="testAuth()" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded">
+                    Test Authentication
+                </button>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4">Storage Status</h2>
+            <div id="storage-status" class="text-sm text-gray-600">
+                Click "Check Storage" to view current data
+            </div>
+        </div>
+        
+        <div class="mt-6 text-center">
+            <a href="index.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium">
+                Go to Main Application
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        function clearStorage() {
+            localStorage.clear();
+            alert('All storage cleared!');
+            checkStorage();
+        }
+        
+        function initDemo() {
+            localStorage.removeItem('demoInitialized');
+            
+            // Reinitialize demo users
+            const demoUsers = [
+                { uid: 'admin1', email: 'admin@eduforge.com', password: 'admin123', role: 'admin' },
+                { uid: 'staff1', email: 'staff@eduforge.com', password: 'staff123', role: 'staff' },
+                { uid: 'student1', email: 'student@eduforge.com', password: 'student123', role: 'student' }
+            ];
+            
+            localStorage.setItem('users', JSON.stringify(demoUsers));
+            
+            demoUsers.forEach(user => {
+                localStorage.setItem(`users_${user.uid}`, JSON.stringify({ 
+                    role: user.role,
+                    email: user.email,
+                    createdAt: new Date().toISOString()
+                }));
+            });
+            
+            // Create comprehensive demo student data
+            const demoStudents = [
+                {
+                    id: 'student1',
+                    admissionId: 'ADM2024001',
+                    name: 'Demo Student',
+                    email: 'student@eduforge.com',
+                    phone: '+91-9876543210',
+                    course: 'Computer Science',
+                    year: '2024',
+                    dob: '2000-05-15',
+                    address: '123 Main St, City, State',
+                    status: 'active',
+                    createdAt: new Date('2024-01-15').toISOString()
+                },
+                {
+                    id: 'student2',
+                    admissionId: 'ADM2024002',
+                    name: 'John Doe',
+                    email: 'john.doe@example.com',
+                    phone: '+91-9876543211',
+                    course: 'Electronics',
+                    year: '2024',
+                    dob: '1999-12-10',
+                    address: '456 Oak Ave, City, State',
+                    status: 'active',
+                    createdAt: new Date('2024-02-01').toISOString()
+                },
+                {
+                    id: 'student3',
+                    admissionId: 'ADM2024003',
+                    name: 'Jane Smith',
+                    email: 'jane.smith@example.com',
+                    phone: '+91-9876543212',
+                    course: 'Mechanical',
+                    year: '2024',
+                    dob: '2001-03-22',
+                    address: '789 Pine Rd, City, State',
+                    status: 'active',
+                    createdAt: new Date('2024-02-15').toISOString()
+                }
+            ];
+            
+            localStorage.setItem('students', JSON.stringify(demoStudents));
+            
+            // Create individual student records
+            demoStudents.forEach(student => {
+                localStorage.setItem(`students_${student.id}`, JSON.stringify(student));
+            });
+            
+            // Create demo fee transactions
+            const demoFees = [
+                {
+                    id: 'fee1',
+                    transactionId: 'TXN2024001',
+                    admissionId: 'ADM2024001',
+                    amount: 80000,
+                    method: 'online',
+                    status: 'completed',
+                    paidAt: new Date('2024-03-01').toISOString()
+                },
+                {
+                    id: 'fee2',
+                    transactionId: 'TXN2024002',
+                    admissionId: 'ADM2024002',
+                    amount: 75000,
+                    method: 'bank',
+                    status: 'completed',
+                    paidAt: new Date('2024-03-05').toISOString()
+                },
+                {
+                    id: 'fee3',
+                    transactionId: 'TXN2024003',
+                    admissionId: 'ADM2024003',
+                    amount: 82000,
+                    method: 'online',
+                    status: 'completed',
+                    paidAt: new Date('2024-03-10').toISOString()
+                }
+            ];
+            
+            localStorage.setItem('fees', JSON.stringify(demoFees));
+            
+            // Create demo hostel allocations
+            const demoHostels = [
+                {
+                    id: 'hostel1',
+                    admissionId: 'ADM2024001',
+                    block: 'A',
+                    roomNumber: 'A-101',
+                    roomType: 'single',
+                    status: 'allocated',
+                    allocatedAt: new Date('2024-02-20').toISOString()
+                },
+                {
+                    id: 'hostel2',
+                    admissionId: 'ADM2024002',
+                    block: 'B',
+                    roomNumber: 'B-205',
+                    roomType: 'double',
+                    status: 'allocated',
+                    allocatedAt: new Date('2024-02-25').toISOString()
+                }
+            ];
+            
+            localStorage.setItem('hostels', JSON.stringify(demoHostels));
+            
+            // Create demo exam data
+            const demoExams = [
+                {
+                    id: 'exam1',
+                    subject: 'Data Structures',
+                    course: 'Computer Science',
+                    date: '2024-04-15',
+                    time: '10:00',
+                    duration: 180,
+                    totalMarks: 100,
+                    instructions: 'Answer all questions. Use of calculators is not allowed.',
+                    status: 'scheduled',
+                    createdAt: new Date('2024-03-01').toISOString()
+                },
+                {
+                    id: 'exam2',
+                    subject: 'Digital Electronics',
+                    course: 'Electronics',
+                    date: '2024-04-18',
+                    time: '14:00',
+                    duration: 180,
+                    totalMarks: 100,
+                    instructions: 'Attempt all sections. Draw neat diagrams where required.',
+                    status: 'scheduled',
+                    createdAt: new Date('2024-03-05').toISOString()
+                },
+                {
+                    id: 'exam3',
+                    subject: 'Engineering Mechanics',
+                    course: 'Mechanical',
+                    date: '2024-03-20',
+                    time: '10:00',
+                    duration: 180,
+                    totalMarks: 100,
+                    instructions: 'Show all calculations clearly.',
+                    status: 'completed',
+                    createdAt: new Date('2024-02-15').toISOString()
+                }
+            ];
+            
+            localStorage.setItem('exams', JSON.stringify(demoExams));
+            
+            localStorage.setItem('demoInitialized', 'true');
+            alert('Complete demo data reinitialized with students, fees, hostels, and exams!');
+            checkStorage();
+        }
+        
+        function checkStorage() {
+            const statusDiv = document.getElementById('storage-status');
+            const keys = Object.keys(localStorage);
+            
+            let html = '<h3 class="font-medium mb-2">LocalStorage Contents:</h3>';
+            if (keys.length === 0) {
+                html += '<p class="text-red-600">No data found in localStorage</p>';
+            } else {
+                html += '<ul class="space-y-1">';
+                keys.forEach(key => {
+                    const value = localStorage.getItem(key);
+                    html += `<li><strong>${key}:</strong> ${value.substring(0, 100)}${value.length > 100 ? '...' : ''}</li>`;
+                });
+                html += '</ul>';
+            }
+            
+            statusDiv.innerHTML = html;
+        }
+        
+        // Test authentication function
+        function testAuth() {
+            const statusDiv = document.getElementById('storage-status');
+            statusDiv.innerHTML = '<h3 class="font-medium mb-2">Testing Authentication...</h3>';
+            
+            // Test if demo users exist
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            
+            let html = '<h3 class="font-medium mb-2">Authentication Test Results:</h3>';
+            html += `<p><strong>Demo Users Found:</strong> ${users.length}</p>`;
+            html += `<p><strong>Current User:</strong> ${currentUser ? currentUser.email : 'None'}</p>`;
+            
+            if (users.length > 0) {
+                html += '<p class="text-green-600">✅ Demo data is properly initialized</p>';
+                html += '<p class="text-blue-600">You can now test login with the credentials above</p>';
+            } else {
+                html += '<p class="text-red-600">❌ No demo users found. Click "Reinitialize Demo Data" first</p>';
+            }
+            
+            statusDiv.innerHTML = html;
+        }
+        
+        // Auto-check storage on load
+        checkStorage();
+    </script>
+</body>
+</html>

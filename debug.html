@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduForge ERP - Debug</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-8">
+        <h1 class="text-3xl font-bold mb-6">EduForge ERP - Debug Console</h1>
+        
+        <div class="bg-white p-6 rounded-lg shadow mb-6">
+            <h2 class="text-xl font-semibold mb-4">JavaScript Error Check</h2>
+            <div id="error-log" class="bg-gray-100 p-4 rounded text-sm font-mono min-h-20"></div>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow mb-6">
+            <h2 class="text-xl font-semibold mb-4">File Loading Test</h2>
+            <div id="file-status" class="space-y-2"></div>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold mb-4">Quick Fixes</h2>
+            <div class="space-y-4">
+                <button onclick="clearAllStorage()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                    Clear All LocalStorage
+                </button>
+                <button onclick="reinitializeDemo()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Reinitialize Demo Data
+                </button>
+                <button onclick="testMainSite()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                    Test Main Site
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Capture JavaScript errors
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            const errorLog = document.getElementById('error-log');
+            errorLog.innerHTML += `<div class="text-red-600">ERROR: ${msg} at ${url}:${lineNo}:${columnNo}</div>`;
+            return false;
+        };
+
+        // Test file loading
+        function testFileLoading() {
+            const files = [
+                'js/config.js',
+                'js/auth.js', 
+                'js/utils.js',
+                'js/dashboard.js'
+            ];
+            
+            const statusDiv = document.getElementById('file-status');
+            
+            files.forEach(file => {
+                const script = document.createElement('script');
+                script.src = file;
+                script.onload = () => {
+                    statusDiv.innerHTML += `<div class="text-green-600">✓ ${file} loaded successfully</div>`;
+                };
+                script.onerror = () => {
+                    statusDiv.innerHTML += `<div class="text-red-600">✗ ${file} failed to load</div>`;
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        function clearAllStorage() {
+            localStorage.clear();
+            alert('All localStorage cleared!');
+        }
+
+        function reinitializeDemo() {
+            // Demo data initialization
+            const demoUsers = [
+                { uid: 'admin1', email: 'admin@eduforge.com', password: 'admin123', role: 'admin' },
+                { uid: 'staff1', email: 'staff@eduforge.com', password: 'staff123', role: 'staff' },
+                { uid: 'student1', email: 'student@eduforge.com', password: 'student123', role: 'student' }
+            ];
+            
+            localStorage.setItem('users', JSON.stringify(demoUsers));
+            localStorage.setItem('demoInitialized', 'true');
+            alert('Demo data reinitialized!');
+        }
+
+        function testMainSite() {
+            window.open('index.html', '_blank');
+        }
+
+        // Run tests on load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('error-log').innerHTML = '<div class="text-green-600">No JavaScript errors detected so far...</div>';
+            testFileLoading();
+        });
+    </script>
+</body>
+</html>
